@@ -1,13 +1,10 @@
 import uvicorn
 import asyncio
 from fastapi import FastAPI
+from src.app.encrypt.router.api_v1.router import router
 
 app = FastAPI(title="Encrypt")
-
-
-@app.get("/")
-async def hello_word():
-    return "Hello Word"
+app.include_router(router)
 
 
 async def main():

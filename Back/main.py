@@ -1,10 +1,12 @@
 import uvicorn
 import asyncio
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from src.app.encrypt.router.api_v1.router import router
 
 app = FastAPI(title="Encrypt")
 app.include_router(router)
+app.mount("/", StaticFiles(directory="../Front/"), name="css", )
 
 
 async def main():

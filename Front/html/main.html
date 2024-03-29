@@ -10,10 +10,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <form class="encrypt__form" method="post" enctype="multipart/form-data">
+        <form class="encrypt__form" method="post" action="/encrypt-file" enctype="multipart/form-data">
             <input class="encrypt-file" type="file" required>
+            <input class="encrypt-password" type="password" required>
             <button class="encrypt__form-btn" type="submit">Зашифровать</button>
         </form>
     </div>
 </body>
+<script type="jscript" src="../js/send_file.js"></script>
 </html>

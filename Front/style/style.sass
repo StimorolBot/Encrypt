@@ -37,16 +37,58 @@ body
   border: 2px solid #1c3767
   color: azure
 
+.file-input
+  opacity: 0
+  visibility: visible
+
+.file-input-lbl
+  position: relative
+  border-radius: 10px
+  width: 50%
+  height: 15%
+  border: 2px solid #1c3767
+  overflow: hidden
+
+.file-input-text
+  display: flex
+  align-items: center
+  position: absolute
+  top: 0
+  right: 0
+  background-color: #1c3767
+  height: 100%
+  color: azure
+  padding: 0 4px
+  transition: 0.2s
+
+  &:hover
+    background-color: #1b4991
+    transition: 0.2s
+    cursor: pointer
+
+.file-input-name
+  position: absolute
+  left: 0
+  top: 0
+  height: 100%
+  width: 55%
+  color: azure
+  overflow: hidden
+  padding-left: 4px
+  font-size: 20px
+  display: flex
+  align-items: center
+
 .encrypt__form-btn
   cursor: pointer
   border-radius: 10px
-  padding: 15px
+  padding: 10px 15px
   font-size: 16px
   background-color: #1c3767
   border: 1px solid black
-  color: azure
   box-shadow: 0 10px #101f3b
   transition: 0.2s
+  color: azure
 
   &:active
     box-shadow: 0 5px #101f3b

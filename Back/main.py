@@ -1,8 +1,21 @@
 import uvicorn
 import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
 from fastapi.staticfiles import StaticFiles
+from fastapi_cache.backends.redis import RedisBackend
+
+from core.config import redis
 from src.app.encrypt.router.api_v1.router import router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    yield
+
 
 app = FastAPI(title="Encrypt")
 app.include_router(router)

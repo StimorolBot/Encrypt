@@ -11,11 +11,12 @@
 <body>
     <div class="wrapper">
         <form class="encrypt__form" method="post" action="/encrypt-file" enctype="multipart/form-data">
-            <input class="encrypt-file" type="file" required>
-            <input class="encrypt-password" type="password" required>
+            <input class="encrypt__form-input file-input" type="file" name="encrypt-file" required>
+            <input class="encrypt__form-input" type="password" name="password" required>
             <button class="encrypt__form-btn" type="submit">Зашифровать</button>
         </form>
     </div>
 </body>
-<script type="jscript" src="../js/send_file.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../js/send_file.js"></script>
 </html>

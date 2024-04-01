@@ -10,7 +10,6 @@ from core.config import config as cf
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", cf.DATABASE_URL)
 
 section = config.config_ini_section
 config.set_section_option(section, "DB_HOST", cf.DB_HOST)

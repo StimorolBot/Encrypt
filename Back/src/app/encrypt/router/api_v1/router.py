@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi import APIRouter, Depends, Request, UploadFile, File
 
 from core.config import template
-from core.operation import save_file
+from core.operations.operation import save_file
 from src.app.encrypt.operations import encrypt
 from src.app.encrypt.schemas.schemas import PasswordSchemas, FileSchemas
 

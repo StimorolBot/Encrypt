@@ -10,12 +10,16 @@
 </head>
 <body>
     <div class="wrapper">
-        <form class="encrypt__form" method="post" action="/encrypt-file" enctype="multipart/form-data">
-            <label class="file-input-lbl" for="file-input">
-                <label class="file-input-text">Загрузить файл</label>
-                <label class="file-input-name"></label>
-                <input class="file-input" type="file" name="encrypt-file" id="file-input" required>
-            </label>
+        <div class="logo-container">
+            <img class="logo" src="#">
+        </div>
+
+        <form class="encrypt__form" action="/encrypt-file" method="POST" enctype="multipart/form-data">
+            <div class="file-input-container">
+                <label class="file-input-text" for="file">Загрузить файл</label>
+                <span class="file-input-name"></span>
+                <input class="file-input" type="file" name="file" id="file" required>
+            </div>
             <input class="encrypt__form-input" type="password" name="password" required>
             <button class="encrypt__form-btn" type="submit">Зашифровать</button>
         </form>

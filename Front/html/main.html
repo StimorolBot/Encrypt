@@ -9,11 +9,11 @@
     <title>Encrypt</title>
 </head>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
+    <section>
         <div class="logo-container">
             <img class="logo" src="#">
         </div>
-
         <form class="encrypt__form" action="/encrypt-file" method="POST" enctype="multipart/form-data">
             <div class="file-input-container">
                 <label class="file-input-text" for="file">Загрузить файл</label>
@@ -23,7 +23,28 @@
             <input class="encrypt__form-input" type="password" name="password" required>
             <button class="encrypt__form-btn" type="submit">Зашифровать</button>
         </form>
-    </div>
+    </section>
+
+    <section class="user">
+        <button class="close-section"></button>
+        <div class="wrapper wrapper-user">
+            <div class="user__info">
+                <img class="user__avatar" src="" alt="user-avatar">
+                <span class="user__name">Test_name_123</span>
+            </div>
+            <ul class="user__file-container">
+                <li class="user__file-info">
+                    <div class="wrapper wrapper__user-file">
+                        <img class="user__file-logo" src="" alt="file-logo">
+                        <span class="user__file-name">Тест.txt</span>
+                        <span class="user__file-date-create">02.04.2024</span>
+                        <span class="user__file-delete">X</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../js/main.js"></script>

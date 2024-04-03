@@ -11,13 +11,13 @@ input {
 
 body {
   background-color: #3B5998;
+  color: azure;
 }
 
 .wrapper {
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
+  margin: 5px;
+  overflow: hidden;
+  border: 2px solid springgreen;
 }
 
 .encrypt__form {
@@ -41,7 +41,7 @@ body {
   min-width: 300px;
   min-height: 40px;
   background-color: transparent;
-  padding: 1%;
+  padding: 0 1%;
   font-size: 3vh;
   border: 2px solid #1c3767;
   color: azure;
@@ -120,6 +120,60 @@ body {
 .encrypt__form-btn:hover {
   background-color: #203e73;
   transition: 0.2s;
+}
+
+.user {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  border-left: 2px solid black;
+  width: 20%;
+  background-color: #294f91;
+}
+
+.wrapper-user {
+  height: 95%;
+}
+
+.close-section {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  top: 1%;
+  left: -25px;
+  border: none;
+  cursor: pointer;
+}
+
+.user__info {
+  border: 2px solid green;
+  height: 20%;
+}
+
+.user__name {
+  height: 120px;
+  border: 2px solid springgreen;
+}
+
+.wrapper__user-file {
+  border: 2px solid rebeccapurple;
+}
+
+.user__file-container {
+  height: 50%;
+  width: 85%;
+  border: 2px solid #0b1d41;
+  border-radius: 10pt;
+}
+
+.user__file-info {
+  position: relative;
+  height: 10%;
+  border: 2px solid #0b1d41;
+  list-style-type: none;
+  border-radius: 10pt;
 }
 
 /*# sourceMappingURL=style.css.map */

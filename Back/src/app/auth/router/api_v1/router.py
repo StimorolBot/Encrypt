@@ -23,7 +23,8 @@ async def register_user(user_schemas: Annotated[RegisterSchemas, Depends()], ses
 
     if user is not None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Пользователь с такой почтой уже существует")
-    create_user = await Crud.create(data_dict=user_schemas.model_dump(), session=session, table=UserTable)
+    user_dict = await UserManager.config_user(user_dict=user_schemas.model_dump())
+    create_user = await Crud.create(data_dict=user_dict, session=session, table=UserTable)
 
     return create_user
 
@@ -37,7 +38,7 @@ async def login_user(response: Response, user_data: Annotated[OAuth2PasswordRequ
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный логин/пароль")
 
     access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = await UserManager.create_access_token(data={"sub": user.user_name}, expires_delta=access_token_expires)
+    access_token = await UserManager.create_access_token(data={"email": user.email}, expires_delta=access_token_expires)
     return response.set_cookie(key="access_token", value=access_token)
 
 
@@ -46,5 +47,8 @@ async def logout_user(response: Response):
     response.delete_cookie(key="access_token")
     return "OK"
 
-# asdasd@dasdas.dasd
-# dasdassdasdasd
+
+@auth_router.post("/texx")
+async def test(s=Depends(UserManager.get_current_user)):
+    print(s)
+    return s

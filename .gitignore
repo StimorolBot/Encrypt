@@ -4,3 +4,4 @@ __pycache__
 style.css.map
 save_file
 .env
+node_modules

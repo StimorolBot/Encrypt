@@ -18,6 +18,7 @@ class FileTable(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=generate_uuid)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("User_Table.id"))
     path: Mapped[str] = mapped_column(index=True)
+    file_name: Mapped[str] = mapped_column(index=True, unique=True)
     time: Mapped[datetime.datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
 
     user: Mapped["UserTable"] = relationship("UserTable", back_populates="files")

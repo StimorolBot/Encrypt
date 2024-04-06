@@ -13,6 +13,7 @@ from core.config import config, pwd_context, cookie_scheme
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
+    from src.app.auth.schemas.auth import UserRead
 
 
 class UserManager:
@@ -51,3 +52,15 @@ class UserManager:
         decode_jwt = jwt.decode(key=config.SECRET_KEY, token=cookie_session)
         current_user = await Crud.read_one(session=session, table=UserTable, field=UserTable.email, value=decode_jwt["email"])
         return current_user.__dict__
+
+    @staticmethod
+    async def on_after_register(user: "UserRead"):
+        print(f"Пользователь {user.email} зарегистрировался")
+
+    @staticmethod
+    async def on_after_login(user: "UserRead"):
+        print(f"Пользователь {user.email} вошел в систему")
+
+    @staticmethod
+    async def on_after_logout(user: "UserRead"):
+        print(f"Пользователь {user.email} вышел из системы")

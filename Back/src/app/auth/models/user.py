@@ -1,6 +1,6 @@
 import datetime
 from uuid import UUID
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,7 +9,7 @@ from core.model.declarative_base import Base
 from core.operations.operation import generate_uuid
 
 if TYPE_CHECKING:
-    from src.app.encrypt.models.model import FileTable
+    from src.app.encrypt.models.model import PathTable
 
 
 class UserTable(Base):
@@ -24,4 +24,4 @@ class UserTable(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False, nullable=False)
     is_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
-    files: Mapped[List["FileTable"]] = relationship("FileTable", back_populates="user")
+    files: Mapped["PathTable"] = relationship("PathTable", back_populates="user")

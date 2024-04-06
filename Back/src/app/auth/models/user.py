@@ -24,4 +24,4 @@ class UserTable(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False, nullable=False)
     is_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
-    files: Mapped["PathTable"] = relationship("PathTable", back_populates="user")
+    path: Mapped["PathTable"] = relationship(back_populates="user")

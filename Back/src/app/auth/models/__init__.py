@@ -1,7 +1,8 @@
 __all__ = (
     "UserTable",
-    "FileTable"
+    "FileTable",
+    "PathTable"
 )
 
 from .user import UserTable
-from src.app.encrypt.models.model import FileTable
+from src.app.encrypt.models.model import FileTable, PathTable

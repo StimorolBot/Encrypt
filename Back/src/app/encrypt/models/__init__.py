@@ -1,7 +1,8 @@
 __all__ = (
     "FileTable",
-    "UserTable"
+    "UserTable",
+    "PathTable"
 )
 
-from .model import FileTable
+from .model import FileTable, PathTable
 from src.app.auth.models.user import UserTable

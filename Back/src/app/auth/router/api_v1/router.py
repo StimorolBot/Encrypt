@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 
 from src.app.auth.models.user import UserTable
 from src.app.auth.user_manager import UserManager
-from src.app.auth.schemas.aurt import RegisterSchemas
+from src.app.auth.schemas.auth import UserCreate
 
 from core.config import config
 from core.operations.crud import Crud
@@ -17,8 +17,8 @@ if TYPE_CHECKING:
 auth_router = APIRouter(tags=["auth"])
 
 
-@auth_router.post("/register", response_model=RegisterSchemas, status_code=status.HTTP_201_CREATED)
-async def register_user(user_schemas: Annotated[RegisterSchemas, Depends()], session: "AsyncSession" = Depends(get_async_session)):
+@auth_router.post("/register", response_model=UserCreate, status_code=status.HTTP_201_CREATED)
+async def register_user(user_schemas: Annotated[UserCreate, Depends()], session: "AsyncSession" = Depends(get_async_session)):
     user = await Crud.read_one(table=UserTable, session=session, field=UserTable.email, value=user_schemas.email)
 
     if user is not None:
@@ -46,9 +46,3 @@ async def login_user(response: Response, user_data: Annotated[OAuth2PasswordRequ
 async def logout_user(response: Response):
     response.delete_cookie(key="access_token")
     return "OK"
-
-
-@auth_router.post("/texx")
-async def test(s=Depends(UserManager.get_current_user)):
-    print(s)
-    return s

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import select, func
+from sqlalchemy import select, func, update
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,3 +21,9 @@ class Crud:
         query = select(table).where(func.lower(field) == func.lower(value))
         results = await session.execute(query)
         return results.unique().scalar_one_or_none()
+
+    @staticmethod
+    async def update(session: "AsyncSession", table: "DeclarativeAttributeIntercept", field, field_val, data: dict):
+        query = update(table).where(field == field_val).values(**data)
+        await session.execute(query)
+        await session.commit()

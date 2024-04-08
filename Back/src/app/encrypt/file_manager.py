@@ -47,7 +47,8 @@ class FileManager:
         res = await session.execute(query)
         return res.unique().scalars().all()
 
-    async def check_exists_file(self, session: "AsyncSession", file_name: str):
+    async def check_exists_file(self, session: "AsyncSession", file_name: str, dir_: "EmailStr"):
         current_file = await self.get_file_info(session=session, file_name=file_name)
         if len(current_file) != 0:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Файл с таким именем уже существует")
+        await Crud.create(session=session, table=FileTable, data_dict={"email": dir_, "name": file_name})

@@ -5,3 +5,6 @@ style.css.map
 save_file
 .env
 node_modules
+.test.env
+.pytest_cache
+.log

@@ -1,11 +1,10 @@
-import {Form} from "./components/Form.jsx";
-import {Sidebar} from "./components/Sidebar.jsx";
+import {Encrypt} from "./components/Encrypt.jsx";
+
 
 export function App() {
     return (
         <>
-            <Form/>
-            <Sidebar/>
+            <Encrypt/>
         </>
     )
 }

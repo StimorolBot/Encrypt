@@ -26,7 +26,7 @@ class UserManager:
             expire = datetime.now(timezone.utc) + timedelta(minutes=60)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, config.SECRET_KEY, algorithm=config.ALGORITHM)
-        return encoded_jwt
+        return encoded_jwt, expire
 
     @classmethod
     async def verify_password(cls, plain_password, hashed_password):
@@ -36,10 +36,11 @@ class UserManager:
         if user is None:
             return False
         else:
-            await self.verify_password(password, user.password)
+            return await self.verify_password(password, user.password)
 
     @staticmethod
     async def config_user(user_dict: dict) -> dict:
+
         user_dict["password"] = pwd_context.hash(user_dict["password"])
         user_dict["is_active"] = False
         user_dict["is_superuser"] = False
@@ -53,18 +54,7 @@ class UserManager:
 
     @staticmethod
     async def get_current_user(session: "AsyncSession" = Depends(get_async_session), jwt_token=Depends(get_jwt_token)) -> UserRead:  # вызвать get_jwt_token
-        token = await jwt_token
-        current_user = await Crud.read_one(session=session, table=UserTable, field=UserTable.email, value=token["email"])
+        jwt_token = await jwt_token
+        current_user = await Crud.read_one(session=session, table=UserTable, field=UserTable.email, value=jwt_token["email"])
         return UserRead(**current_user.__dict__)
 
-    @staticmethod
-    async def on_after_register(user: "UserRead"):
-        print(f"Пользователь {user.email} зарегистрировался")
-
-    @staticmethod
-    async def on_after_login(user: "UserRead"):
-        print(f"Пользователь {user.email} вошел в систему")
-
-    @staticmethod
-    async def on_after_logout(user: "UserRead"):
-        print(f"Пользователь {user.email} вышел из системы")

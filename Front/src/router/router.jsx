@@ -1,8 +1,8 @@
-import {App} from './../App.jsx'
-import {Register} from './../components/auth/Register.jsx';
-import {Login} from './../components/auth/Login.jsx';
-import {PageNotFound} from "./../components/PageNotFound.jsx";
-import {createBrowserRouter} from "react-router-dom";
+import { App } from '/src/App.jsx'
+import { createBrowserRouter } from "react-router-dom";
+import { Login } from '/src/page/auth/Login';
+import { Register } from '/src/page/auth/Register';
+import { PageNotFound } from "/src/page/error/PageNotFound";
 
 
 const router = createBrowserRouter([

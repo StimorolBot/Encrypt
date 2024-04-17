@@ -8,3 +8,4 @@ node_modules
 .test.env
 .pytest_cache
 .log
+.secret

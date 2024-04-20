@@ -1,6 +1,6 @@
-import { useState } from "react";
-import api from "/src/api/config";
-import { redirect } from "react-router-dom";
+import { useState } from "react";   
+import api from "/src/api/api";
+import { redirect, Navigate } from "react-router-dom";
 import { MainBtn } from "/src/components/ui/btn/MainBtn";
 import { MainForm } from "/src/components/ui/form/MainForm";
 import { MainInput } from "/src/components/ui/input/MainInput";
@@ -14,9 +14,9 @@ export function Login() {
     const postlogin = async (event) => {
         event.preventDefault();
         
-        await api.post("/login", userData)
+        await api.post("/auth/login", userData)
             .then((response) => {
-                console.log(response);
+                localStorage.setItem("access_token", response.data["access_token"]);
             })
             .catch((error) =>{
                 console.log(error);

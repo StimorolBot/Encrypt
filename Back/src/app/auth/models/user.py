@@ -19,10 +19,10 @@ class UserTable(Base):
     user_name: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column(unique=True, index=True)
     password: Mapped[str] = mapped_column()
-    refresh_token: Mapped[str | None] = mapped_column()
     date_register: Mapped[datetime.datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
     is_superuser: Mapped[bool] = mapped_column(default=False, nullable=False)
     is_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     path: Mapped["PathTable"] = relationship(back_populates="user")
+    #primaryjoin="and_(User_Table.id == Address.user_id, Address.city=='Boston')",

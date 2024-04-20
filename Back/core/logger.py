@@ -32,6 +32,8 @@ class CustomLogger(ColoredFormatter):
 
 CustomLogger(loger_name="user_logger", path="core/.log/user.log")
 CustomLogger(loger_name="encrypt_logger", path="core/.log/encrypt.log")
+CustomLogger(loger_name="os_logger", path="core/.log/os.log")
 
 user_logger = logging.getLogger("user_logger")
 encrypt_logger = logging.getLogger("encrypt_logger")
+os_logger = logging.getLogger("os_logger")

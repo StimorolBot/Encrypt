@@ -1,4 +1,4 @@
-import api from "/src/api/config";
+import api from "/src/api/api";
 import { useState } from "react";
 import { MainBtn } from "/src/components/ui/btn/MainBtn";
 import { MainForm } from "/src/components/ui/form/MainForm";
@@ -15,7 +15,7 @@ export function Register() {
     const postRegister = async (event) => {
         event.preventDefault();
         
-        await api.post("/register", userData).then((response) => {
+        await api.post("/auth/register", userData).then((response) => {
             console.log(response.data);
             })
             .catch((error) =>{
@@ -25,7 +25,7 @@ export function Register() {
     };
 
     return (
-        <div className="wrapper wrapper__body">
+        <div className="wrapper register__wrapper">
             <MainForm onSubmit={postRegister}>
                 <div className="register-input__container">
                     <MainInput lblText={"Имя"} maxLength={16} 

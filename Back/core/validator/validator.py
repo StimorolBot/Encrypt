@@ -3,7 +3,7 @@ from fastapi import status, HTTPException
 from pydantic import BaseModel, model_validator
 
 
-def email(val: str):
+def check_email(val: str):
     allowed_domains = ["gmail.com", "mail.ru"]
     alp = set(string.ascii_lowercase)
     name, domains = val.split("@")
@@ -22,7 +22,16 @@ def check_forbidden_symbols(val: str):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Поле не должно содержать: {symbols}")
 
 
-func_valid_dict = {"email": email, "user_name": check_forbidden_symbols, "password": check_forbidden_symbols}
+def check_file_size(val: int):
+    if val >= 10_000_000:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Размер файла не должен превышать 10Мб")
+
+
+func_valid_dict = {"email": check_email, "file_size": check_file_size,
+                   "file_name": check_forbidden_symbols,
+                   "user_name": check_forbidden_symbols,
+                   "password": check_forbidden_symbols,
+                   }
 
 
 class BaseValidator(BaseModel):

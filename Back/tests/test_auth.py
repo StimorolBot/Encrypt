@@ -18,6 +18,17 @@ class TestAuthPos:
         response = await ac.post("/auth/register", json=user_data)
         assert response.status_code == status.HTTP_201_CREATED
 
+    async def test_login(self, ac: "AsyncClient"):
+        global access_token, refresh_token
+        user_data = {"email": "test_11_22@gmail.com", "password": "passwordtest"}
+        response = await ac.post("/auth/login", json=user_data)
+
+        response_data = response.json()
+        access_token = response_data["access_token"]
+        refresh_token = response_data["refresh_token"]
+
+        assert response.status_code == status.HTTP_200_OK
+
     async def test_logout(self, ac: "AsyncClient"):
         global access_token
         response = await ac.post("/auth/logout", headers={"Authorization": f"Bearer {access_token}"})

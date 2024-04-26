@@ -8,6 +8,7 @@ class SettingTest(BaseSettings):
     DB_TEST_NAME: str
     DB_TEST_USER: str
     DB_TEST_PASS: str
+    BASE_TEST_PATH: str
 
     @property
     def DB_TEST_URL(self) -> str:

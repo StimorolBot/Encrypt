@@ -13,17 +13,15 @@ if TYPE_CHECKING:
 from core.setting import setting
 
 
-async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "AsyncSession") -> list:
-    file = ""
-    output_path = ""
+async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "AsyncSession", base_path: str = setting.BASE_PATH) -> list:
     buffer_size = 128 * 1024
-    input_file = f"{setting.BASE_PATH}/{dir_}/{file_name}"
+    input_file = f"{base_path}/{dir_}/{file_name}"
 
     match file_name.split("."):
         case file, ext, extension if extension in "aes":
             # Расшифровать файл
             file = f"{file}.{ext}"
-            output_path = f"{setting.BASE_PATH}/{dir_}/{file}"
+            output_path = f"{base_path}/{dir_}/{file}"
 
             try:
                 pyAesCrypt.decryptFile(infile=input_file, outfile=output_path, bufferSize=buffer_size, passw=password)
@@ -33,8 +31,9 @@ async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "Asy
         case file, extension:
             # Зашифровать файл
             file = f"{file}.{extension}.aes"
-            output_path = f"{setting.BASE_PATH}/{dir_}/{file}"
+            output_path = f"{base_path}/{dir_}/{file}"
             pyAesCrypt.encryptFile(infile=input_file, outfile=output_path, bufferSize=buffer_size, passw=password)
+
         case _:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неподдерживаемый формат файла")
 

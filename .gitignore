@@ -3,10 +3,12 @@
 __pycache__
 style.css.map
 save_file
-.env
+.db.env
+.smtp.env
 node_modules
 .test.env
 .pytest_cache
 .log
 .secret
 logo
+.test_file

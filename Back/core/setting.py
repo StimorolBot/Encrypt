@@ -2,7 +2,6 @@ from pathlib import Path
 from pydantic import BaseModel
 from redis import asyncio as aioredis
 from fastapi.security import HTTPBearer
-from passlib.context import CryptContext
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).parent.parent
@@ -25,8 +24,8 @@ class Setting(BaseSettings):
 
     auth_jwt: AuthJWT = AuthJWT()
 
-    BASE_PATH: str
-    model_config = SettingsConfigDict(env_file="core/.env")
+    base_path: str = "save_file"
+    model_config = SettingsConfigDict(env_file="core/.db.env")
 
     @property
     def DATABASE_URL(self) -> str:
@@ -34,6 +33,5 @@ class Setting(BaseSettings):
 
 
 setting = Setting()
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-redis = aioredis.from_url("redis://localhost", encoding="utf8", decode_responses=True)
 http_bearer = HTTPBearer(auto_error=False)
+redis = aioredis.from_url("redis://localhost", encoding="utf8", decode_responses=True)

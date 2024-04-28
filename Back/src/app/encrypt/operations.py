@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 from core.setting import setting
 
 
-async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "AsyncSession", base_path: str = setting.BASE_PATH) -> list:
+async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "AsyncSession", base_path: str = setting.base_path) -> list:
     buffer_size = 128 * 1024
     input_file = f"{base_path}/{dir_}/{file_name}"
 

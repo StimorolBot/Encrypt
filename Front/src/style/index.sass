@@ -5,6 +5,16 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
   font-weight: 400
   color: azure
+  text-decoration: none
+
+:root
+  --hue: 223
+  --bg: hsl(var(--hue),10%,90%)
+  --fg: hsl(var(--hue),10%,10%)
+  --primary: hsl(var(--hue),90%,45%)
+  --primary-down: hsl(var(--hue),90%,65%)
+  --trans-dur: 0.3s
+  font-size: calc(16px + (24 - 16) * (100vw - 320px) / (2560 - 320))
 
 input
   outline: none
@@ -14,11 +24,22 @@ button
   cursor: pointer
   border: none
 
+ul
+  list-style: none
+
 body
-  background-color: #3B5998
+    height: 100vh
+    background-color: var(--bg)
+    color: var(--fg)
+    font: 1em/1.5 Nunito, sans-serif
+    transition: background-color var(--trans-dur), color var(--trans-dur)
 
 .wrapper
-  margin: 5px
+  padding: 4px
   overflow: hidden
-  border: 2px solid springgreen
+  position: relative
 
+.encrypt__wrapper, 
+.login__wrapper,
+.register__wrapper
+  height: 95vh

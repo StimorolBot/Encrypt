@@ -1,0 +1,46 @@
+.btn-input__container
+  position: relative
+  border-radius: 10pt
+  min-width: 340px
+  min-height: 50px
+  border: 2px solid #000
+  overflow: hidden
+  background-color: transparent
+  font-size: 14pt
+
+.btn-input
+  opacity: 0
+  visibility: visible
+  position: absolute
+  z-index: -999
+
+.btn-input__file-name-container
+  position: absolute
+  top: 0
+  left: 4px
+  max-width: 235px
+  height: 100%
+  overflow: hidden
+  display: flex
+  align-items: center
+  
+.btn-input__btn-name-container
+  position: absolute
+  top: 0
+  right: 0
+  min-width: 95px
+
+  height: 100%
+  overflow: hidden
+  text-align: center
+  cursor: pointer
+  transition: 0.2s
+  background-color: #151818
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 14pt
+
+  &:hover
+    background-color: #242929
+    transition: 0.2s

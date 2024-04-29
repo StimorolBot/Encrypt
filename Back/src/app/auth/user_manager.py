@@ -25,7 +25,7 @@ class UserManager:
             return pwd_context.verify(password, user.password)
 
     async def check_user(self, data_login: UserLogin, session: "AsyncSession" = Depends(get_async_session)):
-        user = await Crud.read_one(session=session, table=UserTable, field=UserTable.email, value=data_login.email)
+        user = await Crud.read(session=session, table=UserTable, field=UserTable.email, value=data_login.email)
         if await self.verify_password(user=user, password=data_login.password) is False:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверный логин/пароль")
         return user
@@ -45,7 +45,7 @@ class UserManager:
                                                  session: "AsyncSession" = Depends(get_async_session)):
 
         payload = await JWTToken.validate_token_type(token=refresh_token, token_type=TokenType.REFRESH.value)
-        current_user: UserRead = await Crud.read_one(table=UserTable, session=session, field=UserTable.id, value=payload["sub"])
+        current_user: UserRead = await Crud.read(table=UserTable, session=session, field=UserTable.id, value=payload["sub"])
         access_token = await JWTToken.create_token(token_type=TokenType.ACCESS.value,
                                                    token_data={"sub": str(current_user.id), "email": current_user.email})
         return access_token
@@ -54,6 +54,10 @@ class UserManager:
     async def get_current_user(access_token: Annotated[str | None, Header(alias="Authorization")] = None,
                                session: "AsyncSession" = Depends(get_async_session)) -> UserRead:
 
-        payload = await JWTToken.validate_token_type(token=access_token, token_type=TokenType.ACCESS.value)
-        current_user: UserRead = await Crud.read_one(table=UserTable, session=session, field=UserTable.email, value=payload["email"])
-        return current_user
+        try:
+            payload = await JWTToken.validate_token_type(token=access_token.split("Bearer ")[1], token_type=TokenType.ACCESS.value)
+            current_user: UserRead = await Crud.read(table=UserTable, session=session, field=UserTable.email, value=payload["email"])
+            return current_user
+
+        except IndexError:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неуказан тип токена")

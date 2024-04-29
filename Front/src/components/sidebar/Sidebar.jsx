@@ -9,7 +9,7 @@ export function Sidebar() {
             <input className="burger-checkbox" type="checkbox" id="burger-checkbox"/>
             <label className="burger" htmlFor="burger-checkbox"></label>
             <div className="sidebar">
-                <div className="wrapper wrapper__sidebar">
+                <div className="wrapper sidebar__wrapper">
                     <FileInfo/>
                 </div>
             </div>

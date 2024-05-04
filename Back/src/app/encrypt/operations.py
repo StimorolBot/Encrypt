@@ -3,9 +3,9 @@ import pyAesCrypt
 from typing import TYPE_CHECKING
 from fastapi import HTTPException, status
 
-from core.operations.crud import Crud
 from core.logger import encrypt_logger
 from src.app.encrypt.models.model import FileTable
+from src.app.encrypt.file_manager import FileManager
 
 if TYPE_CHECKING:
     from pydantic import EmailStr
@@ -39,7 +39,8 @@ async def encrypt(dir_: "EmailStr", file_name: str, password: str, session: "Asy
             case _:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неподдерживаемый формат файла")
 
-        await Crud.create(session=session, table=FileTable, data_dict={"email": dir_, "name": file})
+        await FileManager.check_and_create(session=session, dir_=dir_, file_name=file, table=FileTable, field=FileTable.name)
+
         os.remove(input_file)
         return [output_path, file]
 

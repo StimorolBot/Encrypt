@@ -43,7 +43,7 @@ class UserManager:
     @staticmethod
     async def get_current_user_for_refresh_token(refresh_token: str | None = Cookie(default=None),
                                                  session: "AsyncSession" = Depends(get_async_session)):
-
+        print(refresh_token)
         payload = await JWTToken.validate_token_type(token=refresh_token, token_type=TokenType.REFRESH.value)
         current_user: UserRead = await Crud.read(table=UserTable, session=session, field=UserTable.id, value=payload["sub"])
         access_token = await JWTToken.create_token(token_type=TokenType.ACCESS.value,
@@ -59,5 +59,5 @@ class UserManager:
             current_user: UserRead = await Crud.read(table=UserTable, session=session, field=UserTable.email, value=payload["email"])
             return current_user
 
-        except IndexError:
+        except (IndexError, AttributeError):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неуказан тип токена")

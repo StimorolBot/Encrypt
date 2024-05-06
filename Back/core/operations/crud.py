@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from sqlalchemy import select, func, update, delete
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ class Crud:
 
     @staticmethod
     async def read(session: "AsyncSession", table: "DeclarativeAttributeIntercept",
-                   field: "DeclarativeAttributeIntercept", value: str, mode: str = "one"):
+                   field: "DeclarativeAttributeIntercept", value: str, mode: Literal["one", "all"] = "one"):
         query = select(table).where(func.lower(field) == func.lower(value))
         results = await session.execute(query)
 

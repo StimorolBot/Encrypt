@@ -1,0 +1,36 @@
+.context-menu
+    top: 5pt
+    right: 5pt
+    position: absolute
+
+.context-menu-btn
+    display: flex
+    flex-direction: column
+    grid-gap: 2pt 
+    align-items: center
+    cursor: pointer
+
+.context-menu-btn-point
+    width: 3pt
+    height: 3pt
+    background-color: #fff
+    border-radius: 50% 
+    
+.context-menu__container_true,
+.context-menu__container_false
+    position: absolute
+    top: -50pt
+    right: 8pt
+    width: 100pt
+    background-color: #434246
+    visibility: hidden
+    opacity: 0
+    transition: 0.3s
+    overflow: hidden
+    
+.context-menu__container_true
+    visibility: visible
+    opacity: 1
+    transition: 0.3s
+    border-radius: 5pt
+    padding: 2pt 0

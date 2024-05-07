@@ -18,4 +18,4 @@ smtp_setting = Smtp()
 # celery -A core.bg_tasks.setting:celery flower
 # celery -A core.bg_tasks.setting:celery worker --loglevel=INFO --pool=solo
 celery = Celery("smtp", broker="redis://localhost:6379")
-
+celery.autodiscover_tasks(["celery"])

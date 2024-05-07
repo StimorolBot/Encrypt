@@ -1,0 +1,35 @@
+.input__container
+    position: relative
+
+.input-main
+    border-radius: 10pt
+    min-width: 340px
+    min-height: 50px
+    background-color: transparent
+    border: 2px solid #000
+    padding: 0 5px
+    font-size: 14pt
+
+.input-lbl
+    position: absolute
+    top: 0
+    left: 10px
+    height: 100% 
+    transition: 0.3s
+    z-index: 1
+    display: flex
+    align-items: center
+    z-index: -2
+    
+
+.input-main:focus ~ .input-lbl
+    transform: translate(5px, -26px)
+    font-size: 0.8em
+    transition: 0.3s
+    z-index: 1
+
+.input-main:valid ~ .input-lbl
+    transform: translate(5px, -26px)
+    font-size: 0.8em
+    transition: 0.3s
+    z-index: 1

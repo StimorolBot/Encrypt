@@ -1,19 +1,19 @@
 from datetime import timedelta
 from typing import TYPE_CHECKING
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 
 from src.app.auth.token import JWTToken
 from src.app.auth.token_type import TokenType
 from src.app.auth.models.user import UserTable
 from src.app.auth.user_manager import UserManager
 from src.app.auth.schemas.token import TokenSchemas
-from src.app.auth.schemas.auth import UserCreate, UserRead
+from src.app.auth.schemas.auth import UserCreate, UserRead, UserEmailConfirm
 
 from core.setting import setting
 from core.logger import user_logger
 from core.operations.crud import Crud
 from core.db import get_async_session
-from core.bg_tasks.smtp import send_email
+from core.bg_tasks.tasks import send_email
 from core.operations.operation import get_seconds
 
 if TYPE_CHECKING:
@@ -41,12 +41,12 @@ async def login_user(response: Response, user: UserRead = Depends(UserManager().
     access_token = await JWTToken.create_token(token_type=TokenType.ACCESS.value,
                                                token_data={"sub": str(user.id), "email": user.email})
 
-    refresh_token = await JWTToken.create_token(token_type=TokenType.REFRESH.value, token_data={"sub": str(user.id)},
+    refresh_token = await JWTToken.create_token(token_type=TokenType.REFRESH.value, token_data={"sub": user.email},
                                                 expire_timedelta=timedelta(days=setting.auth_jwt.refresh_token_expire_days))
 
     exp = get_seconds(setting.auth_jwt.refresh_token_expire_days)
     # не устанавливаются
-    response.set_cookie(key="refresh_token", value=refresh_token, max_age=exp, expires=exp, httponly=True, domain="127.0.0.1", samesite="none")
+    # response.set_cookie(key="refresh_token", value=refresh_token, max_age=exp, expires=exp, httponly=True, domain="127.0.0.1", samesite="none")
     user_logger.info(f"Пользователь {user.email} вошел в систему")
     return TokenSchemas(access_token=access_token, refresh_token=refresh_token, refresh_max_age=exp)
 
@@ -63,9 +63,10 @@ async def refresh_jwt_token(token=Depends(UserManager.get_current_user_for_refre
     return TokenSchemas(access_token=token)
 
 
-@auth_router.get("/email-confirm")
-async def email_confirm():
-    send_email.delay("Sling Academy")
+@auth_router.post("/email-confirm")
+async def email_confirm(request: Request, user: UserEmailConfirm):
+    ip_address = request.client.host
+    send_email.apply_async(args=(ip_address, user.user_name), ignore_result=False)
 
 
 @auth_router.post("/reset-password")

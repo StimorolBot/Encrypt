@@ -4,9 +4,11 @@ import cookies from "/src/api/cookies"
 import { Link } from "react-router-dom";
 import { MainBtn } from "/src/components/ui/btn/MainBtn";
 import { MainForm } from "/src/components/ui/form/MainForm";
+import { PwdInput } from "../../components/ui/input/PwdInput";
 import { MainInput } from "/src/components/ui/input/MainInput";
 
 import "/src/style/components/page/auth/login.sass";
+
 
 export function Login() {
     const [userData, setUserData] = useState({"email": "", "password":""});
@@ -39,7 +41,7 @@ export function Login() {
                     type="text" placeholder=" " required
                     onChange={(event) => setUserData({...userData, email: event.target.value})}
                 />
-                <MainInput lblText={"Пароль"} maxLength={24}
+                <PwdInput lblText={"Пароль"} maxLength={24}
                     type="password" placeholder=" " required
                     onChange={(event) => setUserData({...userData, password: event.target.value})}
                 />

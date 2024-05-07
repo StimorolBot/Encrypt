@@ -1,0 +1,94 @@
+.sidebar__file-container
+  position: relative
+  min-height: 40px
+  min-width: 85%
+  max-height: 420px
+  border-radius: 10pt
+  border: 3px solid #000
+  overflow-y: scroll
+
+.sidebar__username-container
+  position: absolute
+  //top: -25px
+  //left: 50%
+  width: 85%
+  //transform: translate(-50%, -50%)
+  //overflow: hidden
+  //text-align: center
+
+.file__wrapper
+  height: 100%
+  padding: 10pt 4pt
+
+.sidebar__file-container::-webkit-scrollbar
+  width: 0
+
+
+
+  
+
+
+.sidebar-file-ico
+  position: absolute
+  left: 0
+  top: 50%
+  transform: translate(0, -50%)
+  width: 35px
+  height: 35px
+
+.file-none
+  text-align: center
+
+.context-menu-item
+    text-align: center
+    cursor: pointer
+    transition: 0.3s
+
+    &:hover
+        background: #8b8888
+        transition: 0.3s
+
+.sidebar__file-info
+  min-height: 50px
+  max-height: 80px
+  border: 3px solid #000
+  border-radius: 10pt
+  position: relative
+  width: 100%
+
+.sidebar-file
+  max-width: 250px
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-45%, -50%)
+  z-index: -999
+
+.todo-list
+  display: flex
+  justify-content: center
+  flex-direction: column
+  grid-gap: 10pt
+
+
+
+
+
+// анимации 
+.sidebar__file-ransition-enter
+  opacity: 0
+
+.sidebar__file-ransition-enter-active
+  opacity: 1
+  transition: opacity 500ms ease-in
+
+.sidebar__file-ransition-exit
+  opacity: 1
+
+.sidebar__file-ransition-exit-active 
+  opacity: 0
+  transition: opacity 500ms ease-in
+

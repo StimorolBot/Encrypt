@@ -1,0 +1,26 @@
+.encrypt__btn-container
+  width: 100%
+  position: relative
+
+.download-btn
+  opacity: 0
+  visibility: hidden
+  transition: 0.5s
+
+.encrypt-btn,
+.download-btn
+  position: absolute
+  top: 0
+  left: 50%
+  transform: translate(-50%, 0)
+  transition: 0.5s
+
+.encrypt-btn_active
+  left: 15%
+  transform: translate(0, 0)
+  transition: 0.5s
+
+.encrypt-btn_active ~ .download-btn
+  left: 73%
+  opacity: 1
+  visibility: visible

@@ -10,33 +10,31 @@ import "/src/style/components/sidebar/file_info.sass"
 
 
 export function FileInfo() {
-    const [fileData, setFileData] = useState([]);
+    const [data, setData] = useState({
+        "user_name": "", "email": "", "file_name": [] 
+    });
     
     const [fetchFile, isLoad, errorResponse] = useFetch(async () => {
             const response = await getFileInfo();
-            setFileData(response);
+            setData({...data,
+                user_name: response["user_name"],
+                email: response["email"],
+                file_name: response["path"]["file_name"].map(file => file["name"])
+            });    
         }
     );
-
+  
     const deleteFile = async (event, index) =>  {
         event.preventDefault();
-        let name = fileData[0]["path"]["file_name"][index].name;
-        
-        // Удаление элементов из списка
-        setFileData(fileData.filter(file => file.name !== name));
-        
+        const name = data["file_name"][index];
+        // Удаление элемента из списка
+        setData({...data, file_name: data["file_name"].filter( item => item != name )}); 
         await api.delete("/file/file-delete", {data: {"name": name}})
-        .then((response) => {
-            console.log(response.data);    
-        })
-        .catch((err) => {
-            console.log(err);   
-        });
     }
 
     const downloadFile = async (event, index) => {
         event.preventDefault();
-        let name = fileData[0]["path"]["file_name"][index].name;
+        const name = data["file_name"][index];
         
         await api.get(`/file/download/user@mail.ru/${name}`, { responseType: 'blob' })
         .then((response) => {
@@ -51,25 +49,24 @@ export function FileInfo() {
         fetchFile();
     }, []);
 
-
     return (
         <> 
-        <div className="sidebar__username-container" onClick={() => t()}>
-            <h3 className="sidebar-username">{'fileData[0]["user_name"]'}</h3>
-        </div>
+        {/* <div className="sidebar__username-container" onClick={() => t()}>
+            <h3 className="sidebar-username">{'data[0]["user_name"]'}</h3>
+        </div> */}
         
         <ul className="sidebar__file-container" >
             <div className="wrapper file__wrapper">
-                { fileData === undefined ? <h4 className="file-none">У вас еще нет файлов</h4>
-                : fileData["user_name"] !== undefined &&
+                { data === undefined ? <h4 className="file-none">У вас еще нет файлов</h4>
+                : data["user_name"] !== undefined &&
                     <TransitionGroup className="todo-list">
-                        { fileData["path"]["file_name"].map((item, index) =>
+                        { data["file_name"].map((item, index) =>
                             <CSSTransition classNames="sidebar__file-ransition" 
                                 key={index}  timeout={ 100 }>
                                 
                                 <li className="sidebar__file-info">
                                     <img className="sidebar-file-ico" src="../../public/file-regular.svg" alt="file.ico"/>
-                                    
+                    
                                     <ContextMenu>
                                         <li className="context-menu-item" 
                                             onClick={(e) => downloadFile(e, index)}>
@@ -81,7 +78,7 @@ export function FileInfo() {
                                             Удалить
                                         </li>
                                     </ContextMenu>
-                                    <p className="sidebar-file">{ item.name }</p>
+                                    <p className="sidebar-file">{ item }</p>
                                 </li>
                                 
                             </CSSTransition>

@@ -1,7 +1,7 @@
 import api from "/src/api/api";
-import { useState } from "react";  
-import cookies from "/src/api/cookies"
+import cookies from "/src/api/cookies";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { MainBtn } from "/src/components/ui/btn/MainBtn";
 import { MainForm } from "/src/components/ui/form/MainForm";
 import { PwdInput } from "../../components/ui/input/PwdInput";
@@ -11,9 +11,9 @@ import "/src/style/components/page/auth/login.sass";
 
 
 export function Login() {
-    const [userData, setUserData] = useState({"email": "", "password":""});
+    const { register, handleSubmit, reset, formState: { errors, isValid }} = useForm({mode: "onBlur"});
  
-    const postlogin = async (event) => {
+    const loginUser = async (event) => {
         event.preventDefault();
         
         await api.post("/auth/login", userData)
@@ -29,30 +29,46 @@ export function Login() {
                 }
             });
         };
-
-    // использовать useEffect
-    //if (isAuth == true)
-      //  return <Navigate to={"/"}/>    
+    
+    const validateForm = async (data) => {
+        let userDict = {
+             "email": data.email,
+             "password": data.password
+        }
+        await loginUser(userDict);
+    }
 
     return (
-        <div className="wrapper login__wrapper">
-            <MainForm onSubmit={postlogin}>
-                <MainInput lblText={"Логин"} maxLength={24}
-                    type="text" placeholder=" " required
-                    onChange={(event) => setUserData({...userData, email: event.target.value})}
-                />
-                <PwdInput lblText={"Пароль"} maxLength={24}
-                    type="password" placeholder=" " required
-                    onChange={(event) => setUserData({...userData, password: event.target.value})}
-                />
-                <div className="login__reset-password-container">
-                    <Link className="login__reset-password" to="/auth/reset-password">
-                        Сбросить пароль
-                    </Link>
-                </div> 
+        <MainForm onSubmit={ handleSubmit(validateForm) }>
+            <div className="wrapper login__wrapper">
+                <section className="lodin-input__container">
+                    <MainInput lblText={ "Логин" } maxLength={ 30 } type="text" required
+                        register={ register("email", {
+                            minLength: { value: 8, message: "Длинна поля должна быть от 8 символов" },
+                            pattern: { value: /(^[a-zA-Z0-9_-]+@[mail|gmail|]+\.[ru|com]+)/, message: "Неверный формат почты" }
+                        })} errorsMessage={errors?.email?.message} 
+                    />
 
-                <MainBtn>Войти</MainBtn>
-            </MainForm>
-        </div>
+                    <PwdInput lblText={"Пароль"} maxLength={ 24 } type="password" required
+                        register={ register("password", {
+                            minLength: { value: 4, message: "Длинна поля должна быть 4 символов" },
+                        })} errorsMessage={errors?.password?.message} 
+                    />
+                </section>
+                
+                <section className="login__link-container">
+                    <Link className="login-link" to="/auth/reset-password">
+                        Сбросить пароль
+                    </Link> <br />
+                    <Link className="login-link" to="/auth/register">
+                        Создать учетную запись 
+                    </Link>
+                </section>
+                <div className="login__btn-container">
+                    <MainBtn>Войти</MainBtn>
+                </div> 
+                
+            </div>
+        </MainForm>
     );
 }

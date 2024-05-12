@@ -41,7 +41,7 @@ export function Login() {
     return (
         <MainForm onSubmit={ handleSubmit(validateForm) }>
             <div className="wrapper login__wrapper">
-                <section className="lodin-input__container">
+                <section className="login-input__container">
                     <MainInput lblText={ "Логин" } maxLength={ 30 } type="text" required
                         register={ register("email", {
                             minLength: { value: 8, message: "Длинна поля должна быть от 8 символов" },

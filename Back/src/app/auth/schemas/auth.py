@@ -5,7 +5,7 @@ from pydantic import EmailStr, ConfigDict, Field
 
 
 class BaseUser(BaseValidator):
-    email: EmailStr = Field(..., min_length=8, max_length=20)
+    email: EmailStr = Field(..., min_length=8, max_length=30)
 
 
 class UserCreate(BaseUser):
@@ -28,3 +28,7 @@ class UserRead(BaseUser):
     date_register: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserEmailConfirm(BaseUser):
+        user_name: str = Field(..., min_length=4, max_length=20)

@@ -1,23 +1,24 @@
 .register__wrapper
-    .main__form
-        grid-gap: 15pt
-    
+    display: flex
+    flex-direction: column
+    align-items: center
+
 .register-input__container
     display: flex
     flex-direction: column
     justify-content: center
-    align-items: center
-    padding-top: 20pt
+    padding: 20pt 0
     grid-gap: 20pt
     overflow: hidden
 
-.register__form-help
-    overflow: hidden
- 
 .register__link-login
     cursor: pointer
     transition: 0.3s
     color: #c2c2c2
+    margin-bottom: 20pt
+    max-width: 450px 
+    overflow: hidden
+    white-space: nowrap
     
     &:hover
         color: #fff

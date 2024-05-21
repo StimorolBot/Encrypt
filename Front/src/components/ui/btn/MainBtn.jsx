@@ -1,4 +1,4 @@
-import "/src/style/components/ui/btn/main_btn.sass";
+import "./main_btn.sass";
 
 
 export function MainBtn({children, ...props}){

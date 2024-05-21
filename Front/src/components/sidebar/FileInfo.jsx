@@ -1,9 +1,10 @@
-import { api } from "/src/api/api"
+import "./style/file_info.sass";
+
+import { api } from "/src/api/api";
 import { createUrlDownload } from "../../api/url";
 import { ContextMenu } from "../ui/menu/ContextMenu";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import "/src/style/components/sidebar/file_info.sass"
 
 
 export function FileInfo({ fileData, setFileData }) {
@@ -31,7 +32,6 @@ export function FileInfo({ fileData, setFileData }) {
 
     return (
         <ul className="sidebar__file-container">
-
             <div className="sidebar__username-container">
                 <h3 className="sidebar-username">
                     {fileData["user_name"] !== undefined && fileData["user_name"]}
@@ -62,7 +62,6 @@ export function FileInfo({ fileData, setFileData }) {
                                     </ContextMenu>
                                     <p className="sidebar-file">{ item }</p>
                                 </li>
-                                
                             </CSSTransition>
                         )}
                     </TransitionGroup>

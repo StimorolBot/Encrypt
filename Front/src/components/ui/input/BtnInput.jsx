@@ -1,4 +1,4 @@
-import "/src/style/components/ui/input/btn_input.sass";
+import "./style/btn_input.sass";
 
 export function BtnInput({file_name, btn_name, ...props}){
 
@@ -11,7 +11,7 @@ export function BtnInput({file_name, btn_name, ...props}){
                 <p className="btn-input__btn-name">{ btn_name }</p>
             </label>
                 
-            <input className="btn-input" {...props} />
+            <input className="btn-input" autocomplete="off" {...props} />
         </div>
     );
 }

@@ -1,7 +1,7 @@
+import "./context_menu.sass";
+
 import { useRef, useState } from "react";
 import { useClickOutside } from "../../hook/useClickOutside";
-
-import "/src/style/components/ui/menu/context_menu.sass"
 
 
 export function ContextMenu({ children }) {

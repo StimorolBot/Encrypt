@@ -13,12 +13,13 @@
   --fg: hsl(var(--hue),10%,10%)
   --primary: hsl(var(--hue),90%,45%)
   --primary-down: hsl(var(--hue),90%,65%)
-  --trans-dur: 0.3s
-  font-size: calc(16px + (24 - 16) * (100vw - 320px) / (2560 - 320))
 
 input
   outline: none
   border: none
+
+input:-webkit-autofill
+  background-color: transparent !important
 
 button
   cursor: pointer
@@ -28,18 +29,26 @@ ul
   list-style: none
 
 body
-    height: 100vh
     background-color: var(--bg)
     color: var(--fg)
     font: 1em/1.5 Nunito, sans-serif
     transition: background-color var(--trans-dur), color var(--trans-dur)
 
 .wrapper
-  padding: 4px
-  overflow: hidden
+  max-width: 1220px
+  padding: 0 10px
   position: relative
+  margin: 0 auto
 
-.encrypt__wrapper, 
-.login__wrapper,
-.register__wrapper
-  height: 95vh
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus
+  -webkit-text-fill-color: #fff
+  -webkit-box-shadow: 0 0 0 50px var(--bg) inset
+  transition: background-color 5000s ease-in-out 0s

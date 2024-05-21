@@ -1,20 +1,21 @@
 .header__auth-items
     position: absolute
-    display: flex
-    align-items: center
     right: 0
-    transform: translateX(105%)
+    top: 50%
+    transform: translate(105%, -50%)
     transition: 0.5s
-    
+    opacity: 0
+    visibility: hidden
+
 .header__auth-item
     &:hover
         color: #dad1d1
         transition: .2s
 
 .header__auth-items_active
-    transform: translateX(-30%)
+    transform: translate(-35%, -50%)
     opacity: 1
     visibility: visible
     display: flex
     transition: 0.5s
-    grid-gap: 5pt
+    gap: 0 5px

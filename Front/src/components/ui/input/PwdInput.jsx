@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MainInput } from "/src/components/ui/input/MainInput";
 
-import "/src/style/components/ui/input/pwd_input.sass"
+import "./style/pwd_input.sass"
 
 export const PwdInput = ({...props}) => {
     const [hidden, setHidden] = useState(true);

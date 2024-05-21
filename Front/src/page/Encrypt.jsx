@@ -1,20 +1,23 @@
-import api from "/src/api/api";
+import "./encrypt.sass";
+
+import api from "./../api/api";
 import { getFileInfo } from "../api/http";
+import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useFetch } from "../components/hook/useFetch";
-import { MainBtn } from "/src/components/ui/btn/MainBtn";
-import { Sidebar } from "/src/components/sidebar/Sidebar";
+import { MainBtn } from "./../components/ui/btn/MainBtn";
+import { Sidebar } from "./../components/sidebar/Sidebar";
 import { PwdInput } from "../components/ui/input/PwdInput";
-import { MainForm } from "/src/components/ui/form/MainForm";
-import { BtnInput } from "/src/components/ui/input/BtnInput";
-import { DownloadBtn } from "/src/components/ui/btn/DownloadBtn";
+import { MainForm } from "./../components/ui/form/MainForm";
+import { BtnInput } from "./../components/ui/input/BtnInput";
+import { DownloadBtn } from "./../components/ui/btn/DownloadBtn";
 
-import "/src/style/components/page/encrypt.sass";
 
 export function Encrypt() {
     let encryptBtnClass = ["encrypt-btn"]
     const [fileName, setFileName] = useState(""); 
     const [urlFile, setUrlFile] = useState(null);
+    const { register, handleSubmit, reset, formState: { errors, isValid }} = useForm({mode: "onBlur"});
     
     const [fileData, setFileData] = useState({
         "user_name": "", "email": "", "file_name": [] 
@@ -60,32 +63,35 @@ export function Encrypt() {
     }, []);
     
     return(
-        <div className="wrapper encrypt__wrapper">
+        <main className="encrypt">
             <MainForm onSubmit={ uploadFile }>
-                <BtnInput file_name={ userData.file.name }
-                    btn_name={ "Загрузить" }
-                    type="file" id="file" required
-                    onChange={(event) => setUserDate(
-                        {...userData, file: event.target.files[0]}
-                    )}
-                />
-                    
-                <PwdInput lblText={ "Пароль" } 
-                    type="password" maxLength={ 32 }
-                    required onChange={(event) => setUserDate(
-                        {...userData, password: event.target.value}
-                    )}
-                />
-                <section className="encrypt__btn-container">                    
-                    <div className={ encryptBtnClass.join(" ") }>
-                        <MainBtn> Зашифровать </MainBtn>
+                <div className="wrapper">
+                    <div className="encrypt__input-container">
+                        <BtnInput file_name={ userData.file.name }
+                            btn_name={ "Загрузить" }
+                            type="file" id="file" required
+                            onChange={(event) => setUserDate(
+                                {...userData, file: event.target.files[0]}
+                            )}
+                        />
+                            
+                        <PwdInput lblText={ "Пароль" } 
+                            type="password" maxLength={ 32 }
+                            required onChange={(event) => setUserDate(
+                                {...userData, password: event.target.value}
+                            )}
+                        />
                     </div>
-                      
-                    <DownloadBtn btnText={ "Скачать" }  
-                        href={ urlFile } download={ fileName }/> 
-                </section>    
-            </MainForm>            
+                    <div className="encrypt__btn-container">
+                        <div className={ encryptBtnClass.join(" ") }>
+                            <MainBtn> Зашифровать </MainBtn>
+                            <DownloadBtn btnText={ "Скачать" }  
+                                href={ urlFile } download={ fileName }/>
+                        </div>
+                    </div> 
+                </div>
+            </MainForm>
             <Sidebar fileData={ fileData } setFileData={ setFileData }/>
-        </div>
+        </main>
     );
 }

@@ -1,74 +1,73 @@
+import "./style/register.sass";
+
 import api from "/src/api/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MainBtn } from "/src/components/ui/btn/MainBtn";
-import { MainForm } from "/src/components/ui/form/MainForm";
+import { useForm } from "react-hook-form";
+import { MainBtn } from "../../components/ui/btn/MainBtn";
+import { MainForm } from "../../components/ui/form/MainForm";
 import { PwdInput } from "../../components/ui/input/PwdInput";
-import { MainInput } from "/src/components/ui/input/MainInput";
-import { CodeInput } from "/src/components/ui/input/CodeInput";
-
-import "/src/style/components/page/auth/register.sass";
+import { MainInput } from "../../components/ui/input/MainInput";
+import { CodeInput } from "../../components/ui/input/CodeInput";
 
 
 export function Register() {
-    const [userData, setUserData] = useState(
-        {"user_name": "", "email": "", "password": "", "code_confirm": ""});
-    
+    const [email, setEmail] = useState("");
+    const { register, handleSubmit, reset, formState: { errors, isValid }} = useForm({mode: "onBlur"});
 
-    const registerUser = async (event) => {
-        event.preventDefault();
-        await api.post("/auth/register", userData);
+    const registerUser = async ( formData ) => {
+        await api.post("/auth/register", formData);
     };
-
-    const codeConfirm = async (event) =>{
-        event.preventDefault();
-        
-        if (userData["email"] && userData["user_name"]){
-            await api.post("/auth/email-confirm", 
-                { "user_name": userData["user_name"], "email":userData["email"] }
-            )
-        }
-    }
-
+    
     return (
-        <div className="wrapper register__wrapper">
-            <MainForm onSubmit={ registerUser }>
+        <MainForm onSubmit={ handleSubmit(registerUser) }>
+            <div className="wrapper register__wrapper">
                 <section className="register-input__container">
-                    <MainInput lblText={ "Имя" } maxLength={16} type="text"
-                        required onChange={(event) => setUserData(
+                    <MainInput lblText={ "Имя" } maxLength={ 20 } type="text" required
+                        register={ register("user_name", {
+                            minLength: { value: 4, message: "Длинна поля должна быть от 4 символов" }
+                        })} errorsMessage={errors?.user_name?.message} 
+                        onChange={(event) => setUserData(
                             {...userData, user_name: event.target.value}
                         )}
                     />
-                    <MainInput lblText={ "Логин" } maxLength={24} type="email"
-                        required onChange={(event) => setUserData(
-                            {...userData, email: event.target.value}
-                        )}
+                   
+                    <MainInput lblText={ "Логин" } maxLength={ 30 } required
+                        register={register("email", {
+                            minLength: { value: 8, message: "Длинна поля должна быть от 8 символов" },
+                            pattern: { value: /(^[a-zA-Z0-9_-]+@[mail|gmail|]+\.[ru|com]+)/, message: "Неверный формат почты" }
+                        })} errorsMessage={errors?.email?.message} 
+                        onChange={(event) => setEmail(event.target.value)}
                     />
-                    <CodeInput lblText={ "Код подтверждения" } maxLength={6} type="text"
-                    required func={ codeConfirm } onChange={(event) => setUserData(
-                        {...userData, code_confirm: event.target.value}
-                    )}/>
-                    <PwdInput lblText={ "Пароль" } maxLength={24}
-                        type="password" required
-                        onChange={(event) => setUserData(
-                            {...userData, password: event.target.value}
-                        )}
+
+                    <CodeInput lblText={ "Код подтверждения" } maxLength={ 6 } type="text" required
+                        email={ email } error={ errors?.email?.message }
+                        register={register("code_confirm", {
+                            minLength: { value: 6, message: "Длинна поля должна быть 6 символов" }
+                        })} errorsMessage={errors?.code_confirm?.message} 
                     />
-                    <PwdInput lblText={ "Подтвердите пароль" } maxLength={24}
-                        type="password" required
+
+                    <PwdInput lblText={ "Пароль" } maxLength={ 24 } type="password" required
+                        register={register("password", {
+                            minLength: { value: 4, message: "Длинна поля должна быть 4 символов" }
+                        })} errorsMessage={errors?.password?.message} 
+                    />
+
+                    <PwdInput lblText={ "Подтвердите пароль" } maxLength={ 24 } type="password" required
+                        register={register("password_confirm", {
+                            minLength: { value: 4, message: "Длинна поля должна быть 4 символов" },
+                        })} errorsMessage={errors?.password_confirm?.message} 
                     /> 
                 </section>
                 
-                <section className="register__go-to-login">
-                    <Link className="register__link-login" to="/auth/login">
-                        Уже есть учетная запись 
-                    </Link>
-                </section>
+                <Link className="register__link-login" to="/auth/login">
+                    Уже есть учетная запись 
+                </Link>
 
                 <div className="register__btn">   
-                    <MainBtn>Зарегистрироваться</MainBtn>
+                    <MainBtn >Зарегистрироваться</MainBtn>
                 </div>
-            </MainForm>
-        </div>
+            </div>
+        </MainForm>
     );
 }

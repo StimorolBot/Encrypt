@@ -1,5 +1,6 @@
+from core.setting import redis
 from datetime import timedelta
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 
 from src.app.auth.token import JWTToken
@@ -7,14 +8,16 @@ from src.app.auth.token_type import TokenType
 from src.app.auth.models.user import UserTable
 from src.app.auth.user_manager import UserManager
 from src.app.auth.schemas.token import TokenSchemas
-from src.app.auth.schemas.auth import UserCreate, UserRead, UserEmailConfirm
+from src.app.auth.schemas.auth import UserCreate, UserRead, BaseUser, UserResetPassword
 
-from core.setting import setting
 from core.logger import user_logger
 from core.operations.crud import Crud
 from core.db import get_async_session
-from core.bg_tasks.tasks import send_email
-from core.operations.operation import get_seconds
+from core.setting import setting, pwd_context
+from core.operations.operation import get_seconds, set_limited
+
+from core.bg_tasks.setting import celery
+from core.bg_tasks.tasks import send_email, smtp_setting
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,6 +27,11 @@ auth_router = APIRouter(tags=["auth"], prefix="/auth")
 
 @auth_router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def register_user(user_schemas: UserCreate, session: "AsyncSession" = Depends(get_async_session)):
+    code = await redis.get(name=user_schemas.email)
+
+    if code != user_schemas.code_confirm:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный код подтверждения")
+
     user = await Crud.read(table=UserTable, session=session, field=UserTable.email, value=user_schemas.email)
 
     if user is not None:
@@ -63,12 +71,28 @@ async def refresh_jwt_token(token=Depends(UserManager.get_current_user_for_refre
     return TokenSchemas(access_token=token)
 
 
-@auth_router.post("/email-confirm")
-async def email_confirm(request: Request, user: UserEmailConfirm):
+@set_limited(max_calls=2, time_limit=60)
+@auth_router.patch("/reset-password", status_code=status.HTTP_200_OK)
+async def reset_password(user: UserResetPassword, session: "AsyncSession" = Depends(get_async_session)):
+    code = await redis.get(name=user.email)
+
+    if code != user.code_confirm:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный код подтверждения")
+
+    hash_password = pwd_context.hash(user.password)
+    await Crud.update(session=session, table=UserTable, field=UserTable.email, field_val=user.email, data={"password": hash_password})
+
+    return {"detail": "Пароль сброшен"}
+
+
+@auth_router.post("/email-confirm", status_code=status.HTTP_200_OK)
+@set_limited(max_calls=2, time_limit=60)
+async def email_confirm(request: Request, user: BaseUser, type_email: Literal["email_confirm", "reset_password"] = "email_confirm"):
     ip_address = request.client.host
-    send_email.apply_async(args=(ip_address, user.user_name), ignore_result=False)
+    user_agent = request.headers["user-agent"]
 
+    task = send_email.apply_async(args=(ip_address, type_email, user_agent, user.email), ignore_result=False)
+    code = celery.AsyncResult(task.id)
+    await redis.set(name=user.email, value=code.get(), ex=smtp_setting.expire)
 
-@auth_router.post("/reset-password")
-async def reset_password():
-    return "Сброс пароля!"
+    return {"detail": "Письмо отправлено"}

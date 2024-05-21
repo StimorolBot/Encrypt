@@ -1,7 +1,7 @@
+import "./style/auth_user.sass";
+
 import { useState } from "react";
 import { MainNav } from "../ui/nav/MainNav";
-
-import "/src/style/components/header/auth_user.sass";
 
 
 export function HeaderNav() {
@@ -13,18 +13,12 @@ export function HeaderNav() {
     ];
 
     return (
-        <div className="header__auth-container">
-            <MainNav navItems={headerNav} active={isShowNav}/>
-            <div className="" onClick={() => {
-                if (isShowNav)
-                    setIsShowNav(false);
-                else
-                    setIsShowNav(true);
-                }}>
-                <img className="header__auth-btn" 
+        <>
+            <MainNav navItems={ headerNav } active={ isShowNav }/>
+            <div className="header__auth-container" onClick={() => setIsShowNav((state) => !state)}>
+                <img className="header__auth-btn"
                     src="/public/user-regular.svg" alt="auth-btn" />
             </div>
-        </div>    
+        </>    
     );
 }
-

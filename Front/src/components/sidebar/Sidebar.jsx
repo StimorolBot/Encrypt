@@ -1,18 +1,16 @@
-import {FileInfo} from "/src/components/sidebar/FileInfo";
+import "./style/sidebar.sass";
 
-import "/src/style/components/sidebar/sidebar.sass";
+import { FileInfo } from "./../sidebar/FileInfo";
 
 
 export function Sidebar({ fileData, setFileData}) {
     return (
-        <>  
+        <aside className="sidebar">  
             <input className="burger-checkbox" type="checkbox" id="burger-checkbox"/>
             <label className="burger" htmlFor="burger-checkbox"></label>
-            <div className="sidebar">
-                <div className="wrapper sidebar__wrapper">
-                    <FileInfo fileData={ fileData } setFileData={ setFileData }/>
-                </div>
+            <div className="sidebar__container">
+                <FileInfo fileData={ fileData } setFileData={ setFileData }/>
             </div>
-        </>
+        </aside>
     );
 }

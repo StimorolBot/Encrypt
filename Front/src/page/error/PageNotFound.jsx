@@ -1,7 +1,7 @@
+import "./page_not_found.sass";
+
 import { Link } from "react-router-dom";
 import { MainBtn } from "/src/components/ui/btn/MainBtn";
-
-import "/src/style/page_not_found.sass";
 
 
 export function PageNotFound() {

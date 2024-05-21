@@ -11,6 +11,7 @@ class BaseUser(BaseValidator):
 class UserCreate(BaseUser):
     user_name: str = Field(..., min_length=4, max_length=20)
     password: str = Field(..., min_length=4, max_length=24)
+    code_confirm: str = Field(..., max_length=6, min_length=6)
     is_active: bool = False
     is_superuser: bool = False
     is_verified: bool = False
@@ -30,5 +31,8 @@ class UserRead(BaseUser):
     model_config = ConfigDict(from_attributes=True)
 
 
-class UserEmailConfirm(BaseUser):
-        user_name: str = Field(..., min_length=4, max_length=20)
+class UserResetPassword(BaseUser):
+    code_confirm: str = Field(..., max_length=6, min_length=6)
+    password: str = Field(..., min_length=4, max_length=24)
+
+    model_config = ConfigDict(from_attributes=True)

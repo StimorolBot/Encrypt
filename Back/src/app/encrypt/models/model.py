@@ -15,7 +15,7 @@ class PathTable(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     email: Mapped[str] = mapped_column(ForeignKey("User_Table.email"), index=True, unique=True)
-    path: Mapped[str] = mapped_column(index=True, unique=True)
+    path: Mapped[str] = mapped_column(unique=True)
     time: Mapped[datetime.datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
 
     user: Mapped["UserTable"] = relationship("UserTable", back_populates="path")
@@ -26,7 +26,7 @@ class FileTable(Base):
     __tablename__ = "File_Table"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    email: Mapped[int] = mapped_column(ForeignKey("Path_Table.email"))
+    email: Mapped[str] = mapped_column(ForeignKey("Path_Table.email"))
     name: Mapped[str] = mapped_column(index=True, unique=True)
 
     path: Mapped["PathTable"] = relationship(back_populates="file_name")

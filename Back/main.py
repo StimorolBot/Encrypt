@@ -11,6 +11,7 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from core.setting import redis
 from src.app.auth.router.api_v1.router import auth_router
+from src.app.admin.router.api_v1.router import admin_router
 from src.app.encrypt.router.api_v1.router import router, encrypt_router
 
 app = FastAPI(title="Encrypt")
@@ -24,6 +25,7 @@ async def lifespan(app: FastAPI):
 
 app.include_router(router)
 app.include_router(auth_router)
+app.include_router(admin_router)
 app.include_router(encrypt_router)
 app.mount("/", StaticFiles(directory="../Front/"), name="css", )
 

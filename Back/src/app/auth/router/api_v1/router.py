@@ -45,7 +45,7 @@ async def register_user(user_schemas: UserCreate, session: "AsyncSession" = Depe
 
 
 @auth_router.post("/login", status_code=status.HTTP_200_OK, response_model=TokenSchemas, response_model_exclude_none=True)
-async def login_user(response: Response, user: UserRead = Depends(UserManager().check_user)):
+async def login_user(response: Response, user: UserRead = Depends(UserManager().check_user), session: "AsyncSession" = Depends(get_async_session)):
     access_token = await JWTToken.create_token(token_type=TokenType.ACCESS.value,
                                                token_data={"sub": str(user.id), "email": user.email})
 
@@ -53,6 +53,7 @@ async def login_user(response: Response, user: UserRead = Depends(UserManager().
                                                 expire_timedelta=timedelta(days=setting.auth_jwt.refresh_token_expire_days))
 
     exp = get_seconds(setting.auth_jwt.refresh_token_expire_days)
+    await Crud.update(session=session, table=UserTable, field=UserTable.email, field_val=user.email, data={"is_active": True, "is_verified": True})
     # не устанавливаются
     # response.set_cookie(key="refresh_token", value=refresh_token, max_age=exp, expires=exp, httponly=True, domain="127.0.0.1", samesite="none")
     user_logger.info(f"Пользователь {user.email} вошел в систему")
@@ -61,9 +62,12 @@ async def login_user(response: Response, user: UserRead = Depends(UserManager().
 
 @auth_router.post("/logout", status_code=status.HTTP_200_OK)
 async def logout_user(response: Response, session: "AsyncSession" = Depends(get_async_session),
-                      current_user: "UserRead" = Depends(UserManager.get_current_user)):
+                      current_user: "UserRead" = Depends(UserManager.get_current_user)) -> dict:
     response.delete_cookie(key="refresh_token")
     await Crud.update(session=session, table=UserTable, field=UserTable.email, field_val=current_user.email, data={"is_active": False})
+
+    user_logger.info(f"Пользователь {current_user.email} вышел в систему")
+    return {"detail": f"Пользователь {current_user.user_name} вышел из системы"}
 
 
 @auth_router.post("/refresh", response_model=TokenSchemas, response_model_exclude_none=True)
@@ -82,7 +86,8 @@ async def reset_password(user: UserResetPassword, session: "AsyncSession" = Depe
     hash_password = pwd_context.hash(user.password)
     await Crud.update(session=session, table=UserTable, field=UserTable.email, field_val=user.email, data={"password": hash_password})
 
-    return {"detail": "Пароль сброшен"}
+    user_logger.info(f"Пользователь {user.email} сменил пароль")
+    return {"detail": f"Пароль сброшен"}
 
 
 @auth_router.post("/email-confirm", status_code=status.HTTP_200_OK)

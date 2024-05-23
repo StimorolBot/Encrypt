@@ -9,6 +9,7 @@ from core.model.declarative_base import Base
 from core.operations.operation import generate_uuid
 
 if TYPE_CHECKING:
+    from src.app.auth.models.token import TokenTable
     from src.app.encrypt.models.model import PathTable
 
 
@@ -23,6 +24,7 @@ class UserTable(Base):
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
     is_superuser: Mapped[bool] = mapped_column(default=False, nullable=False)
     is_verified: Mapped[bool] = mapped_column(default=False, nullable=False)
+    is_blocked: Mapped[datetime.datetime | None] = mapped_column()
 
     path: Mapped["PathTable"] = relationship(back_populates="user")
-    #primaryjoin="and_(User_Table.id == Address.user_id, Address.city=='Boston')",
+    refresh_token: Mapped["TokenTable"] = relationship(back_populates="user_token")

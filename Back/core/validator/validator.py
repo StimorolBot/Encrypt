@@ -24,13 +24,19 @@ def check_forbidden_symbols(val: str):
 
 def check_file_size(val: int):
     if val >= 10_000_000:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Размер файла не должен превышать 10Мб")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Размер файла не должен превышать 10Мб")
+
+
+def check_date(val: int):
+    if val <= 0:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Дата не может быть отрицательной или равной нулю")
 
 
 func_valid_dict = {"email": check_email, "file_size": check_file_size,
                    "file_name": check_forbidden_symbols,
                    "user_name": check_forbidden_symbols,
                    "password": check_forbidden_symbols,
+                   "date": check_date
                    }
 
 
@@ -38,8 +44,9 @@ class BaseValidator(BaseModel):
 
     @model_validator(mode="after")
     @classmethod
-    def test(cls, data):
+    def validator(cls, data):
         data_dict: dict = data.model_dump()
+
         for item in data_dict.items():
             func = func_valid_dict.get(item[0])
             if func:

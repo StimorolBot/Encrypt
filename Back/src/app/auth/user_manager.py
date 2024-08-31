@@ -35,8 +35,9 @@ class UserManager:
     async def config_user(user_dict: dict) -> dict:
 
         user_dict["password"] = pwd_context.hash(user_dict["password"])
+        del user_dict["code_confirm"]
         user_dict["is_active"] = False
-        user_dict["is_superuser"] = False
+        user_dict["is_superuser"] = False  # удалить
         user_dict["is_verified"] = False
 
         return user_dict

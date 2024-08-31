@@ -1,3 +1,4 @@
+import socket
 from celery import Celery
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -9,6 +10,7 @@ class Smtp(BaseSettings):
     host: str = "smtp.gmail.com"
     ADMIN_EMAIL: str
     expire: int = 120
+    worker_name: str = f"celery@{socket.gethostname()}"
 
     model_config = SettingsConfigDict(env_file="core/bg_tasks/.smtp.env")
 

@@ -4,7 +4,6 @@ import asyncio
 from pydantic import EmailStr
 from email.message import EmailMessage
 
-
 from core.bg_tasks.setting import smtp_setting, celery
 from core.bg_tasks.operations import generate_email, unlock_user
 
@@ -29,5 +28,5 @@ def send_email(ip_address: str, type_email: str, user_agent: str, user_email: Em
 
 
 @celery.task(name="unlock_user", max_retries=3, default_retry_delay=10)
-def unlock_user_task(email):
-    asyncio.run(unlock_user(email))
+def unlock_user_task(**kwargs):
+    asyncio.run(unlock_user(kwargs["email"]))

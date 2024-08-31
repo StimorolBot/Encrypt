@@ -9,6 +9,6 @@ node_modules
 .test.env
 .pytest_cache
 .log
-.secret
 logo
 .test_file
+jwt-private.pem
